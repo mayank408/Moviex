@@ -128,26 +128,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<MovieSearch>call, Response<MovieSearch> response) {
 
-                Log.d(TAG, "Number of movies quered: " + response.body().getResults().size());
-
-                if(response.body().getResults().size()==0)
-                    Toast.makeText(MainActivity.this, "No Movie Found", Toast.LENGTH_SHORT).show();
-
-                for (int i = 0; i < response.body().getResults().size(); i++) {
-                    title = response.body().getResults().get(i).getTitle();
-                    rating = response.body().getResults().get(i).getRating();
-                    imgUrl = response.body().getResults().get(i).getImgUrl();
-                    imgUrl = URL + imgUrl;
-
-
-                    moviesList.add(new movies(title, rating, imgUrl));
-                    adapter.notifyDataSetChanged();
-
-
-                    Log.v(TAG, imgUrl);
-
-                }
-
+                handleresponse(response);
             }
 
             @Override
@@ -160,13 +141,29 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-       /* try {
-            Glide.with(this).load(R.drawable.cover).into((ImageView) findViewById(R.id.backdrop));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
+    private void handleresponse(Response<MovieSearch> response) {
+
+        Log.d(TAG, "Number of movies quered: " + response.body().getResults().size());
+
+        if(response.body().getResults().size()==0)
+            Toast.makeText(MainActivity.this, "No Movie Found", Toast.LENGTH_SHORT).show();
+
+        for (int i = 0; i < response.body().getResults().size(); i++) {
+            title = response.body().getResults().get(i).getTitle();
+            rating = response.body().getResults().get(i).getRating();
+            imgUrl = response.body().getResults().get(i).getImgUrl();
+            imgUrl = URL + imgUrl;
+
+
+            moviesList.add(new movies(title, rating, imgUrl));
+            adapter.notifyDataSetChanged();
+
+
+            Log.v(TAG, imgUrl);
+
+        }
+
+    }
 
 
 
@@ -212,23 +209,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<MovieSearch>call, Response<MovieSearch> response) {
 
-                    Log.d(TAG, "Number of movies received: " + response.body().getResults().size());
-
-
-                    for (int i = 0; i < response.body().getResults().size(); i++) {
-                        title = response.body().getResults().get(i).getTitle();
-                        rating = response.body().getResults().get(i).getRating();
-                        imgUrl = response.body().getResults().get(i).getImgUrl();
-                        imgUrl = URL + imgUrl;
-
-
-                    moviesList.add(new movies(title, rating, imgUrl));
-                    adapter.notifyDataSetChanged();
-
-
-                    Log.v(TAG, imgUrl);
-
-                }
+                   handleresponse(response);
 
                     }
 
