@@ -24,10 +24,7 @@ import com.example.mayanktripathi.popularmovies.model.MovieInfo;
 import com.example.mayanktripathi.popularmovies.model.MovieSearch;
 import com.example.mayanktripathi.popularmovies.model.movies;
 import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
-import com.google.android.gms.common.api.GoogleApiClient;
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -49,10 +46,6 @@ public class MainActivity extends AppCompatActivity {
     private String title;
     private String rating;
 
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,8 +118,8 @@ public class MainActivity extends AppCompatActivity {
         final String TAG = MainActivity.class.getSimpleName();
 
         // TODO - insert your themoviedb.org API KEY here
-         String API_KEY = "2b47a29cda3b623cc10069fd23476ea9";
-         final String URL = "http://image.tmdb.org/t/p/w185";
+          String  API_KEY = "2b47a29cda3b623cc10069fd23476ea9";
+          final String URL = "http://image.tmdb.org/t/p/w185";
 
 
             TheMovieDbApi apiService =
@@ -146,27 +139,6 @@ public class MainActivity extends AppCompatActivity {
                         imgUrl = response.body().getResults().get(i).getImgUrl();
                         imgUrl = URL + imgUrl;
 
-
-                        try {
-                            urlimage = new URL(imgUrl);
-                        } catch (MalformedURLException e) {
-                            e.printStackTrace();
-                        }
-
-                        if (urlimage != null)
-                            new Thread(new Runnable() {
-
-                                @Override
-                                public void run() {
-                                    try {
-                                        if (urlimage != null)
-                                            bmp = BitmapFactory.decodeStream(urlimage.openConnection().getInputStream());
-                                            urlimage = null;
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            }).start();
 
                     moviesList.add(new movies(title, rating, imgUrl));
                     adapter.notifyDataSetChanged();
@@ -189,38 +161,14 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
-
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    public Action getIndexApiAction() {
-        Thing object = new Thing.Builder()
-                .setName("Main Page") // TODO: Define a title for the content shown.
-                // TODO: Make sure this auto-generated URL is correct.
-                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
-                .build();
-        return new Action.Builder(Action.TYPE_VIEW)
-                .setObject(object)
-                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
-                .build();
-    }
-
     @Override
     public void onStart() {
         super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
     }
 
     @Override
     public void onStop() {
         super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-
     }
 
     /**

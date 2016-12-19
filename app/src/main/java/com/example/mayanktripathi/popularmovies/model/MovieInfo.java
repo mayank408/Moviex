@@ -22,6 +22,67 @@ public class MovieInfo {
     @Expose
     private String imgUrl;
 
+    @SerializedName("overview")
+    @Expose
+    private String description;
+
+    @SerializedName("release_date")
+    @Expose
+    private String realasedate;
+
+    @SerializedName("backdrop_path")
+    @Expose
+    private String posterUrl;
+
+    @SerializedName("original_language")
+    @Expose
+    private String language;
+
+
+    @SerializedName("popularity")
+    @Expose
+    private String popularity;
+
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getRealasedate() {
+        return realasedate;
+    }
+
+    public void setRealasedate(String realasedate) {
+        this.realasedate = realasedate;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public String getPosterUrl() {
+        return posterUrl;
+    }
+
+    public void setPosterUrl(String posterUrl) {
+        this.posterUrl = posterUrl;
+    }
+
+    public String getPopularity() {
+        return popularity;
+    }
+
+    public void setPopularity(String popularity) {
+        this.popularity = popularity;
+    }
 
     public String getTitle() {
         return title;

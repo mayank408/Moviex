@@ -13,7 +13,7 @@ import retrofit2.http.Query;
 public interface TheMovieDbApi {
 
 
-    @GET("movie/top_rated")
+    @GET("discover/movie?sort_by=popularity.desc")
     Call<MovieSearch> getresult(@Query("api_key") String apiKey);
 
 }
