@@ -1,0 +1,113 @@
+package com.example.mayanktripathi.popularmovies.Adapter;
+
+import android.content.Context;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.example.mayanktripathi.popularmovies.MainActivity;
+import com.example.mayanktripathi.popularmovies.R;
+import com.example.mayanktripathi.popularmovies.model.movies;
+
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+/**
+ * Created by mayanktripathi on 17/12/16.
+ */
+
+public class RecycleviewAdapter extends RecyclerView.Adapter<RecycleviewAdapter.CardViewHolder> {
+
+    private Context context;
+
+
+    public static class CardViewHolder extends RecyclerView.ViewHolder {
+
+        CardView cardView;
+
+
+        @BindView(R.id.movies_img)
+        public ImageView imgMovie;
+
+        @BindView(R.id.movies_title)
+        public TextView titleMovie;
+
+        @BindView(R.id.movies_genre)
+        public TextView genreMovie;
+
+
+        public CardViewHolder(View itemView) {
+
+
+
+            super(itemView);
+
+            cardView = (CardView) itemView.findViewById(R.id.card_view);
+            ButterKnife.bind(this, itemView);
+
+        }
+    }
+
+
+    @Override
+    public CardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.movies_card, parent, false);
+        CardViewHolder cdh = new CardViewHolder(v);
+        return cdh;
+
+    }
+
+
+    @Override
+    public void onBindViewHolder(CardViewHolder holder, int position) {
+        holder.titleMovie.setText(moviesList.get(position).getTitle());
+        holder.genreMovie.setText(moviesList.get(position).getGenre());
+        Glide.with(context)
+                .load(moviesList.get(position).getImgUrl())
+                .error(R.mipmap.ic_launcher)
+                .centerCrop()
+                .into(holder.imgMovie);
+
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "safasf", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        holder.imgMovie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "adssada", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public int getItemCount() {
+        return moviesList.size();
+    }
+
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+    }
+
+    List<movies> moviesList;
+
+    public RecycleviewAdapter(Context context, List<movies> moviesList) {
+        this.moviesList = moviesList;
+        this.context = context;
+    }
+}
