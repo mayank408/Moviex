@@ -1,33 +1,30 @@
 package com.example.mayanktripathi.popularmovies;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Rect;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
 
 
 import com.example.mayanktripathi.popularmovies.Adapter.RecycleviewAdapter;
-import com.example.mayanktripathi.popularmovies.model.MovieInfo;
 import com.example.mayanktripathi.popularmovies.model.MovieSearch;
 import com.example.mayanktripathi.popularmovies.model.movies;
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.Thing;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,18 +37,31 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecycleviewAdapter adapter;
     private List<movies> moviesList;
-    private URL urlimage;
-    private Bitmap bmp;
     private String imgUrl;
     private String title;
     private String rating;
+    private SearchView searchView = null;
+    private SearchView.OnQueryTextListener queryTextListener;
+    private Toolbar toolbar;
+    private Menu menu;
+    public static String searchquery;
+    public static boolean isSearch = false;
+
+    final String TAG = MainActivity.class.getSimpleName();
+
+    // TODO - insert your themoviedb.org API KEY here
+    String  API_KEY = "2b47a29cda3b623cc10069fd23476ea9";
+    final String URL = "http://image.tmdb.org/t/p/w185";
+
+
+    TheMovieDbApi apiService =
+            MovieSearchApi.getClient().create(TheMovieDbApi.class);
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         recyclerView = (RecyclerView) findViewById(R.id.rv_movies);
 
@@ -71,6 +81,85 @@ public class MainActivity extends AppCompatActivity {
 
         prepareAlbums();
 
+    }
+        @Override
+        public boolean onCreateOptionsMenu(final Menu menu) {
+            this.menu = menu;
+            getMenuInflater().inflate(R.menu.menu, menu);
+            searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+            searchView.setSubmitButtonEnabled(true);
+            searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+                @Override
+                public boolean onClose() {
+                    searchView.onActionViewCollapsed();
+                    return false;
+                }
+            });
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    searchquery(query);
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+
+                    return false;
+                }
+            });
+            return true;
+        }
+
+    private void searchquery(String query) {
+
+        searchquery = query;
+
+        isSearch = true;
+        moviesList.removeAll(moviesList);
+        recyclerView.removeAllViewsInLayout();
+        adapter.notifyDataSetChanged();
+
+        query = query.replace(" ", "+");
+
+        Call<MovieSearch> call = apiService.getsearch(API_KEY,query);
+        call.enqueue(new Callback<MovieSearch>() {
+            @Override
+            public void onResponse(Call<MovieSearch>call, Response<MovieSearch> response) {
+
+                Log.d(TAG, "Number of movies quered: " + response.body().getResults().size());
+
+                if(response.body().getResults().size()==0)
+                    Toast.makeText(MainActivity.this, "No Movie Found", Toast.LENGTH_SHORT).show();
+
+                for (int i = 0; i < response.body().getResults().size(); i++) {
+                    title = response.body().getResults().get(i).getTitle();
+                    rating = response.body().getResults().get(i).getRating();
+                    imgUrl = response.body().getResults().get(i).getImgUrl();
+                    imgUrl = URL + imgUrl;
+
+
+                    moviesList.add(new movies(title, rating, imgUrl));
+                    adapter.notifyDataSetChanged();
+
+
+                    Log.v(TAG, imgUrl);
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<MovieSearch>call, Throwable t) {
+                // Log error here since request failed
+                Log.e(TAG, t.toString());
+            }
+        });
+
+
+    }
+
        /* try {
             Glide.with(this).load(R.drawable.cover).into((ImageView) findViewById(R.id.backdrop));
         } catch (Exception e) {
@@ -79,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
 
-    }
+
 
     private void initCollapsingToolbar() {
         final CollapsingToolbarLayout collapsingToolbar =
@@ -100,6 +189,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if (scrollRange + verticalOffset == 0) {
                     collapsingToolbar.setTitle(getString(R.string.app_name));
+
                     isShow = true;
                 } else if (isShow) {
                     collapsingToolbar.setTitle(" ");
@@ -114,16 +204,8 @@ public class MainActivity extends AppCompatActivity {
      */
     private void prepareAlbums() {
 
+             isSearch = false;
 
-        final String TAG = MainActivity.class.getSimpleName();
-
-        // TODO - insert your themoviedb.org API KEY here
-          String  API_KEY = "2b47a29cda3b623cc10069fd23476ea9";
-          final String URL = "http://image.tmdb.org/t/p/w185";
-
-
-            TheMovieDbApi apiService =
-                    MovieSearchApi.getClient().create(TheMovieDbApi.class);
 
             Call<MovieSearch> call = apiService.getresult(API_KEY);
             call.enqueue(new Callback<MovieSearch>() {
@@ -149,9 +231,6 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                     }
-
-
-
 
                 @Override
                 public void onFailure(Call<MovieSearch>call, Throwable t) {

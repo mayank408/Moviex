@@ -16,4 +16,7 @@ public interface TheMovieDbApi {
     @GET("discover/movie?sort_by=popularity.desc")
     Call<MovieSearch> getresult(@Query("api_key") String apiKey);
 
+
+    @GET("search/movie?&language=en-US&?&page=1&include_adult=false")
+    Call<MovieSearch> getsearch(@Query("api_key") String apikey , @Query("query") String query);
 }

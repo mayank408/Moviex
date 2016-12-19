@@ -122,30 +122,6 @@ public class RecycleviewAdapter extends RecyclerView.Adapter<RecycleviewAdapter.
     }
 
 
-
-
-        //Bitmap photo = BitmapFactory.decodeResource(context.getResources(), R.drawable.movies);
-
-       /* Palette.generateAsync(photo, new Palette.PaletteAsyncListener() {
-            public void onGenerated(Palette palette) {
-                int bgColor = palette.getMutedColor(context.getResources().getColor(android.R.color.black));
-                holder.mainholder.setBackgroundColor(bgColor);
-            }
-        });*/
-
-
-     /*   private void applyColors(Palette.Swatch swatch) {
-            if (swatch != null) {
-
-                .setBackgroundColor(swatch.getRgb());
-                mTitleView.setTextColor(swatch.getBodyTextColor());
-                mGenresView.setTextColor(swatch.getTitleTextColor());
-               // mFavoriteButton.setColorFilter(swatch.getBodyTextColor(), PorterDuff.Mode.MULTIPLY);
-            }
-        }*/
-
-
-
     @Override
     public int getItemCount() {
         return moviesList.size();

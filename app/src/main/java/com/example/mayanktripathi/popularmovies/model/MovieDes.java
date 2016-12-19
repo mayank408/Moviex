@@ -3,8 +3,10 @@ package com.example.mayanktripathi.popularmovies.model;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,11 +32,14 @@ public class MovieDes extends AppCompatActivity {
 
     final String TAG = MainActivity.class.getSimpleName();
     String API_KEY = "2b47a29cda3b623cc10069fd23476ea9";
+    final String poster_URL = "http://image.tmdb.org/t/p/w500";
     final String URL = "http://image.tmdb.org/t/p/w185";
+    Call<MovieSearch> call;
 
 
     TextView title, description, rating, realeasedate, language;
     ImageView poster, headposter;
+    CollapsingToolbarLayout toolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,6 +47,7 @@ public class MovieDes extends AppCompatActivity {
         setContentView(R.layout.movie_des);
 
 
+        toolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         title = (TextView) findViewById(R.id.movieDetailTitle);
         language = (TextView) findViewById(R.id.language);
         realeasedate = (TextView) findViewById(R.id.releaseDate);
@@ -62,7 +68,13 @@ public class MovieDes extends AppCompatActivity {
         TheMovieDbApi apiService =
                 MovieSearchApi.getClient().create(TheMovieDbApi.class);
 
-        Call<MovieSearch> call = apiService.getresult(API_KEY);
+        if(MainActivity.isSearch)
+            call = apiService.getsearch(API_KEY , MainActivity.searchquery);
+        else {
+            call = apiService.getresult(API_KEY);
+        }
+
+
         call.enqueue(new Callback<MovieSearch>() {
                          @Override
                          public void onResponse(Call<MovieSearch> call, Response<MovieSearch> response) {
@@ -74,8 +86,13 @@ public class MovieDes extends AppCompatActivity {
                              String poster_movie = response.body().getResults().get(pos).getPosterUrl();
                              String release = response.body().getResults().get(pos).getRealasedate();
                              String img = response.body().getResults().get(pos).getImgUrl();
+                             String lang = response.body().getResults().get(pos).getLanguage();
                              img = URL + img;
+                             poster_movie = poster_URL + poster_movie;
 
+                             toolbar.setTitle(title_movie);
+
+                             language.setText(lang);
                              title.setText(title_movie);
                              description.setText(des);
                              realeasedate.setText(release);
@@ -83,7 +100,14 @@ public class MovieDes extends AppCompatActivity {
                                      .load(poster_movie)
                                      .error(R.mipmap.ic_launcher)
                                      .crossFade()
+                                     .into(headposter);
+
+                             Glide.with(getBaseContext())
+                                     .load(img)
+                                     .error(R.mipmap.ic_launcher)
+                                     .crossFade()
                                      .into(poster);
+
 
 
                          }
