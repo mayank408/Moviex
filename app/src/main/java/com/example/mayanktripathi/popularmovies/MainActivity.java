@@ -1,7 +1,6 @@
 package com.example.mayanktripathi.popularmovies;
 
 import android.app.ProgressDialog;
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Rect;
@@ -10,7 +9,6 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -43,12 +41,9 @@ public class MainActivity extends AppCompatActivity {
     private String title;
     private String rating;
     private SearchView searchView = null;
-    private SearchView.OnQueryTextListener queryTextListener;
-    private Toolbar toolbar;
     private Menu menu;
     public static String searchquery;
     public static boolean isSearch = false;
-    public boolean visibility;
     public ProgressDialog pdialog;
 
     final String TAG = MainActivity.class.getSimpleName();
@@ -91,59 +86,59 @@ public class MainActivity extends AppCompatActivity {
         prepareAlbums();
 
     }
-        @Override
-        public boolean onCreateOptionsMenu(final Menu menu) {
-            this.menu = menu;
-            getMenuInflater().inflate(R.menu.menu, menu);
-            searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
-            searchView.setSubmitButtonEnabled(true);
-            searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-                @Override
-                public boolean onClose() {
-                    searchView.onActionViewCollapsed();
-                    moviesList.removeAll(moviesList);
-                    recyclerView.removeAllViewsInLayout();
-                    adapter.notifyDataSetChanged();
+    @Override
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        this.menu = menu;
+        getMenuInflater().inflate(R.menu.menu, menu);
+        searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+        searchView.setSubmitButtonEnabled(true);
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                searchView.onActionViewCollapsed();
+                moviesList.removeAll(moviesList);
+                recyclerView.removeAllViewsInLayout();
+                adapter.notifyDataSetChanged();
 
-                    Call<MovieSearch> calls = apiService.getresult(API_KEY);
-                    calls.enqueue(new Callback<MovieSearch>() {
-                        @Override
-                        public void onResponse(Call<MovieSearch> call, Response<MovieSearch> response) {
+                Call<MovieSearch> calls = apiService.getresult(API_KEY);
+                calls.enqueue(new Callback<MovieSearch>() {
+                    @Override
+                    public void onResponse(Call<MovieSearch> call, Response<MovieSearch> response) {
 
-                            if(!isNetworkConnected())
-                                Toast.makeText(MainActivity.this, "Check your internet connection", Toast.LENGTH_SHORT).show();
-
-
-                            handleresponse(response);
-                        }
-
-                        @Override
-                        public void onFailure(Call<MovieSearch> call, Throwable t) {
-                            if(!isNetworkConnected())
+                        if(!isNetworkConnected())
                             Toast.makeText(MainActivity.this, "Check your internet connection", Toast.LENGTH_SHORT).show();
-                        }
-                    });
 
 
-                    return false;
-                }
-            });
-            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                        handleresponse(response);
+                    }
 
-                @Override
-                public boolean onQueryTextSubmit(String query) {
-                    searchquery(query);
-                    return false;
-                }
+                    @Override
+                    public void onFailure(Call<MovieSearch> call, Throwable t) {
+                        if(!isNetworkConnected())
+                            Toast.makeText(MainActivity.this, "Check your internet connection", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
-                @Override
-                public boolean onQueryTextChange(String newText) {
 
-                    return false;
-                }
-            });
-            return true;
-        }
+                return false;
+            }
+        });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchquery(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                return false;
+            }
+        });
+        return true;
+    }
 
     private void searchquery(String query) {
 
@@ -233,26 +228,26 @@ public class MainActivity extends AppCompatActivity {
      */
     private void prepareAlbums() {
 
-             isSearch = false;
+        isSearch = false;
 
 
-            Call<MovieSearch> call = apiService.getresult(API_KEY);
-            call.enqueue(new Callback<MovieSearch>() {
-                @Override
-                public void onResponse(Call<MovieSearch>call, Response<MovieSearch> response) {
+        Call<MovieSearch> call = apiService.getresult(API_KEY);
+        call.enqueue(new Callback<MovieSearch>() {
+            @Override
+            public void onResponse(Call<MovieSearch>call, Response<MovieSearch> response) {
 
-                    pdialog.hide();
-                   handleresponse(response);
+                pdialog.hide();
+                handleresponse(response);
 
-                    }
+            }
 
-                @Override
-                public void onFailure(Call<MovieSearch>call, Throwable t) {
-                    // Log error here since request failed
-                    Log.e(TAG, t.toString());
-                }
-            });
-        }
+            @Override
+            public void onFailure(Call<MovieSearch>call, Throwable t) {
+                // Log error here since request failed
+                Log.e(TAG, t.toString());
+            }
+        });
+    }
 
     @Override
     public void onStart() {

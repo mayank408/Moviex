@@ -52,6 +52,19 @@ public class MovieInfo {
     private String key;
 
 
+    @SerializedName("content")
+    @Expose
+    private String reviews;
+
+
+    public String getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(String reviews) {
+        this.reviews = reviews;
+    }
+
     public String getKey() {
         return key;
     }

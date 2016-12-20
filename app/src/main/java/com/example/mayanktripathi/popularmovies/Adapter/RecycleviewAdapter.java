@@ -38,10 +38,6 @@ import butterknife.ButterKnife;
 public class RecycleviewAdapter extends RecyclerView.Adapter<RecycleviewAdapter.CardViewHolder> {
 
     private Context context;
-    AdapterView.OnItemClickListener mItemClickListener;
-    TextView title;
-
-
 
 
     public static class CardViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -102,20 +98,29 @@ public class RecycleviewAdapter extends RecyclerView.Adapter<RecycleviewAdapter.
                         .intoCallBack(new BitmapPalette.CallBack() {
                             @Override
                             public void onPaletteLoaded(Palette palette) {
-                              //  RecycleviewAdapter.this.applyColors(palette.getVibrantSwatch());
+                                //  RecycleviewAdapter.this.applyColors(palette.getVibrantSwatch());
                             }
                         }))
                 .into(holder.imgMovie);
 
 
-    holder.imgMovie.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent i = new Intent(context ,MovieDes.class).putExtra("position" , position);
-            context.startActivity(i);
+        holder.imgMovie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context ,MovieDes.class).putExtra("position" , position);
+                context.startActivity(i);
 
-        }
-    });
+            }
+        });
+
+        holder.mainholder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context ,MovieDes.class).putExtra("position" , position);
+                context.startActivity(i);
+
+            }
+        });
 
 
 
@@ -133,7 +138,7 @@ public class RecycleviewAdapter extends RecyclerView.Adapter<RecycleviewAdapter.
         super.onAttachedToRecyclerView(recyclerView);
     }
 
-    List<movies> moviesList;
+    private List<movies> moviesList;
 
     public RecycleviewAdapter(Context context, List<movies> moviesList) {
         this.moviesList = moviesList;
