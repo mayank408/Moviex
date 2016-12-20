@@ -5,7 +5,6 @@
     android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/movie"
     android:fitsSystemWindows="true">
 
     <android.support.design.widget.AppBarLayout
@@ -50,6 +49,7 @@
                         android:id="@+id/love_music"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textStyle="bold"
                         android:text="Movies"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/backdrop_title" />

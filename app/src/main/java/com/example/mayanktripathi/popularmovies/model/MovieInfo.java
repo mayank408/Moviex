@@ -43,6 +43,30 @@ public class MovieInfo {
     @Expose
     private String popularity;
 
+    @SerializedName("id")
+    @Expose
+    private String id;
+
+    @SerializedName("key")
+    @Expose
+    private String key;
+
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getDescription() {
         return description;

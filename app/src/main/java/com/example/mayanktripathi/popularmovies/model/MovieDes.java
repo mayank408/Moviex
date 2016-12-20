@@ -1,15 +1,20 @@
 package com.example.mayanktripathi.popularmovies.model;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.mayanktripathi.popularmovies.MainActivity;
@@ -32,14 +37,20 @@ public class MovieDes extends AppCompatActivity {
 
     final String TAG = MainActivity.class.getSimpleName();
     String API_KEY = "2b47a29cda3b623cc10069fd23476ea9";
-    final String poster_URL = "http://image.tmdb.org/t/p/w500";
-    final String URL = "http://image.tmdb.org/t/p/w185";
+    final String poster_URL = "http://image.tmdb.org/t/p/w1000";
+    final String URL = "http://image.tmdb.org/t/p/w300";
     Call<MovieSearch> call;
+    public String id;
+    public String videokey;
 
 
     TextView title, description, rating, realeasedate, language;
     ImageView poster, headposter;
     CollapsingToolbarLayout toolbar;
+
+
+    TheMovieDbApi apiService =
+            MovieSearchApi.getClient().create(TheMovieDbApi.class);
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,12 +72,64 @@ public class MovieDes extends AppCompatActivity {
         Bundle bundle = intent.getExtras();
         final int pos = bundle.getInt("position");
 
-
         Log.v("main activity", "pos =  " + pos);
 
 
-        TheMovieDbApi apiService =
-                MovieSearchApi.getClient().create(TheMovieDbApi.class);
+
+        headposter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+
+                call = apiService.getvideo(id ,API_KEY);
+                call.enqueue(new Callback<MovieSearch>() {
+                    @Override
+                    public void onResponse(Call<MovieSearch> call, Response<MovieSearch> response) {
+
+                        Log.v(TAG , response.body().getResults().size() + "  no");
+
+                        videokey = response.body().getResults().get(0).getKey();
+                        Log.v(TAG ,  "hvhjvhjj" + videokey);
+
+                        String url = "https://www.youtube.com/watch?v=" + videokey;
+                        Uri uri = Uri.parse(url);
+
+                        // create an intent builder
+                        CustomTabsIntent.Builder intentBuilder = new CustomTabsIntent.Builder();
+
+                        // Begin customizing
+                        // set toolbar colors
+                        intentBuilder.setToolbarColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
+                        intentBuilder.setSecondaryToolbarColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+
+                        // set start and exit animations
+                        //intentBuilder.setStartAnimations(this, R.anim.slide_in_right, R.anim.slide_out_left);
+                        intentBuilder.setExitAnimations(getApplicationContext(), android.R.anim.slide_in_left,
+                                android.R.anim.slide_out_right);
+
+                        // build custom tabs intent
+                        CustomTabsIntent customTabsIntent = intentBuilder.build();
+
+                        // launch the url
+                        customTabsIntent.launchUrl(MovieDes.this, uri);
+                    }
+
+                    @Override
+                    public void onFailure(Call<MovieSearch> call, Throwable t) {
+
+                        Log.e(TAG , t.toString());
+                        Toast.makeText(MovieDes.this, t.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+        }
+        );
+
+
+
+
 
         if(MainActivity.isSearch)
             call = apiService.getsearch(API_KEY , MainActivity.searchquery);
@@ -87,6 +150,7 @@ public class MovieDes extends AppCompatActivity {
                              String release = response.body().getResults().get(pos).getRealasedate();
                              String img = response.body().getResults().get(pos).getImgUrl();
                              String lang = response.body().getResults().get(pos).getLanguage();
+                             id = response.body().getResults().get(pos).getId();
                              img = URL + img;
                              poster_movie = poster_URL + poster_movie;
 

@@ -1,9 +1,11 @@
 package com.example.mayanktripathi.popularmovies;
 
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Rect;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -46,12 +48,14 @@ public class MainActivity extends AppCompatActivity {
     private Menu menu;
     public static String searchquery;
     public static boolean isSearch = false;
+    public boolean visibility;
+    public ProgressDialog pdialog;
 
     final String TAG = MainActivity.class.getSimpleName();
 
     // TODO - insert your themoviedb.org API KEY here
     String  API_KEY = "2b47a29cda3b623cc10069fd23476ea9";
-    final String URL = "http://image.tmdb.org/t/p/w185";
+    final String URL = "http://image.tmdb.org/t/p/w300";
 
 
     TheMovieDbApi apiService =
@@ -62,6 +66,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        pdialog=new ProgressDialog(this);
+        pdialog.setCancelable(true);
+        pdialog.setMessage("Welcome !! Awesome movies are waiting for you ....");
+        pdialog.show();
 
         recyclerView = (RecyclerView) findViewById(R.id.rv_movies);
 
@@ -92,6 +101,30 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public boolean onClose() {
                     searchView.onActionViewCollapsed();
+                    moviesList.removeAll(moviesList);
+                    recyclerView.removeAllViewsInLayout();
+                    adapter.notifyDataSetChanged();
+
+                    Call<MovieSearch> calls = apiService.getresult(API_KEY);
+                    calls.enqueue(new Callback<MovieSearch>() {
+                        @Override
+                        public void onResponse(Call<MovieSearch> call, Response<MovieSearch> response) {
+
+                            if(!isNetworkConnected())
+                                Toast.makeText(MainActivity.this, "Check your internet connection", Toast.LENGTH_SHORT).show();
+
+
+                            handleresponse(response);
+                        }
+
+                        @Override
+                        public void onFailure(Call<MovieSearch> call, Throwable t) {
+                            if(!isNetworkConnected())
+                            Toast.makeText(MainActivity.this, "Check your internet connection", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+
                     return false;
                 }
             });
@@ -123,21 +156,20 @@ public class MainActivity extends AppCompatActivity {
 
         query = query.replace(" ", "+");
 
-        Call<MovieSearch> call = apiService.getsearch(API_KEY,query);
+        Call<MovieSearch> call = apiService.getsearch(API_KEY, query);
         call.enqueue(new Callback<MovieSearch>() {
             @Override
-            public void onResponse(Call<MovieSearch>call, Response<MovieSearch> response) {
+            public void onResponse(Call<MovieSearch> call, Response<MovieSearch> response) {
 
                 handleresponse(response);
             }
 
             @Override
-            public void onFailure(Call<MovieSearch>call, Throwable t) {
+            public void onFailure(Call<MovieSearch> call, Throwable t) {
                 // Log error here since request failed
                 Log.e(TAG, t.toString());
             }
         });
-
 
     }
 
@@ -209,6 +241,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<MovieSearch>call, Response<MovieSearch> response) {
 
+                    pdialog.hide();
                    handleresponse(response);
 
                     }
@@ -277,6 +310,12 @@ public class MainActivity extends AppCompatActivity {
     private int dpToPx(int dp) {
         Resources r = getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(
+                Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null;
     }
 }
 
