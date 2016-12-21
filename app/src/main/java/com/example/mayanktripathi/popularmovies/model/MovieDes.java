@@ -1,5 +1,6 @@
 package com.example.mayanktripathi.popularmovies.model;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -19,6 +21,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.mayanktripathi.popularmovies.Adapter.RecycleviewAdapter;
+import com.example.mayanktripathi.popularmovies.Adapter.reviewAdapter;
 import com.example.mayanktripathi.popularmovies.MainActivity;
 import com.example.mayanktripathi.popularmovies.MovieSearchApi;
 import com.example.mayanktripathi.popularmovies.R;
@@ -51,9 +54,14 @@ public class MovieDes extends AppCompatActivity {
     public String reviewstext;
 
 
+    private Context context;
     private RecyclerView recyclerView;
-    private RecycleviewAdapter adapter;
-    private List<String> reviewlist;
+    RecyclerView.Adapter recyclerViewAdapter;
+    RecyclerView.LayoutManager recylerViewLayoutManager;
+
+    List<String> reviewlist = new ArrayList<>();
+    String s = "dsa";
+
 
 
     TextView title, description, rating, realeasedate, language , review;
@@ -78,11 +86,20 @@ public class MovieDes extends AppCompatActivity {
         headposter = (ImageView) findViewById(R.id.backdrop);
         description = (TextView) findViewById(R.id.movieSummary);
 
+        context = getApplicationContext();
+
+
 
         recyclerView = (RecyclerView) findViewById(R.id.reviewRv);
+        recylerViewLayoutManager = new LinearLayoutManager(context);
+        recyclerView.setLayoutManager(recylerViewLayoutManager);
+        recyclerViewAdapter = new reviewAdapter(context, reviewlist);
+        recyclerView.setAdapter(recyclerViewAdapter);
 
-        reviewlist = new ArrayList<>();
-       // adapter = new RecycleviewAdapter(getApplicationContext(), reviewlist);
+
+
+
+
 
         Intent intent = getIntent();
 
@@ -215,15 +232,17 @@ public class MovieDes extends AppCompatActivity {
                 Log.v(TAG, response.toString());
                 Log.v(TAG, response.body().getResults().size() + "  size");
 
+
+
                 for(int i = 0 ; i<response.body().getResults().size() ; i++)
                 {
-                   // reviewstext = response.body().getResults().get(i).getReviews();
+                    reviewstext = response.body().getResults().get(i).getReviews();
 
 
-                    //review.append(reviewstext.substring(0 , 200) + "\n\n\n");
+                    Log.v(TAG , reviewstext);
 
-
-                    //Log.v(TAG , reviewstext);
+                     reviewlist.add(reviewstext);
+                     recyclerViewAdapter.notifyDataSetChanged();
 
 
                 }
