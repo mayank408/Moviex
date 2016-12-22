@@ -18,7 +18,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -51,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     public static boolean isSearch = false;
     public ProgressDialog pdialog;
     public int count = 2;
+    public TextView typemovie;
 
     final String TAG = MainActivity.class.getSimpleName();
 
@@ -90,6 +93,8 @@ public class MainActivity extends AppCompatActivity {
 
         initCollapsingToolbar();
 
+        typemovie = (TextView) findViewById(R.id.typemovie);
+
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
@@ -125,6 +130,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
         this.menu = menu;
+
+
         getMenuInflater().inflate(R.menu.menu, menu);
         searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
         searchView.setSubmitButtonEnabled(true);
@@ -135,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
                 moviesList.removeAll(moviesList);
                 recyclerView.removeAllViewsInLayout();
                 adapter.notifyDataSetChanged();
+
 
                 Call<MovieSearch> calls = apiService.getresult(API_KEY);
                 calls.enqueue(new Callback<MovieSearch>() {
@@ -174,6 +182,87 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId())
+        {
+            case  R.id.popular_movies:
+                moviesList.removeAll(moviesList);
+                recyclerView.removeAllViewsInLayout();
+                adapter.notifyDataSetChanged();
+                typemovie.setText("Popular");
+
+                Call<MovieSearch> call = apiService.getpopular(API_KEY);
+                call.enqueue(new Callback<MovieSearch>() {
+                    @Override
+                    public void onResponse(Call<MovieSearch> call, Response<MovieSearch> response) {
+
+                        handleresponse(response);
+                    }
+
+                    @Override
+                    public void onFailure(Call<MovieSearch> call, Throwable t) {
+                        // Log error here since request failed
+                        Log.e(TAG, t.toString());
+                    }
+                });
+
+                return true;
+
+            case R.id.upcoming_movies:
+                moviesList.removeAll(moviesList);
+                recyclerView.removeAllViewsInLayout();
+                adapter.notifyDataSetChanged();
+                typemovie.setText("Upcoming");
+
+                Call<MovieSearch> calling = apiService.getupcoming(API_KEY);
+                calling.enqueue(new Callback<MovieSearch>() {
+                    @Override
+                    public void onResponse(Call<MovieSearch> call, Response<MovieSearch> response) {
+
+                        handleresponse(response);
+                    }
+
+                    @Override
+                    public void onFailure(Call<MovieSearch> call, Throwable t) {
+                        // Log error here since request failed
+                        Log.e(TAG, t.toString());
+                    }
+                });
+
+                return true;
+
+
+            case R.id.top_movies:
+                moviesList.removeAll(moviesList);
+                recyclerView.removeAllViewsInLayout();
+                adapter.notifyDataSetChanged();
+                typemovie.setText("Top Rated");
+
+                Call<MovieSearch> called = apiService.getresult(API_KEY);
+                called.enqueue(new Callback<MovieSearch>() {
+                    @Override
+                    public void onResponse(Call<MovieSearch> call, Response<MovieSearch> response) {
+
+                        handleresponse(response);
+                    }
+
+                    @Override
+                    public void onFailure(Call<MovieSearch> call, Throwable t) {
+                        // Log error here since request failed
+                        Log.e(TAG, t.toString());
+                    }
+                });
+
+
+            default:
+                return super.onOptionsItemSelected(item);
+
+
+    }
     }
 
     private void searchquery(String query) {

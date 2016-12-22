@@ -27,4 +27,13 @@ public interface TheMovieDbApi {
     @GET("movie/{id}/reviews?&language=en-US&page=1")
     Call<MovieSearch> getreviews(@Path("id") String id , @Query("api_key") String apikey);
 
+    @GET("movie/top_rated?&language=en-US&page=1")
+    Call<MovieSearch> getpopular(@Query("api_key") String apiKey);
+
+
+    @GET("movie/upcoming?&language=en-US&page=1")
+    Call<MovieSearch> getupcoming(@Query("api_key") String apiKey);
+
+
+
 }
