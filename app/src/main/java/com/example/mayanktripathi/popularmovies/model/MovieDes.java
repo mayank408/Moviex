@@ -20,7 +20,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.mayanktripathi.popularmovies.Adapter.reviewAdapter;
@@ -253,7 +252,7 @@ public class MovieDes extends AppCompatActivity {
                                                   public void onFailure(Call<MovieSearch> call, Throwable t) {
 
                                                       Log.e(TAG, t.toString());
-                                                      Toast.makeText(MovieDes.this, t.toString(), Toast.LENGTH_SHORT).show();
+
                                                   }
                                               });
 

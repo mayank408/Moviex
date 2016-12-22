@@ -64,7 +64,7 @@ import java.util.List;
                         holder.textView.setMaxLines(100);
                         maxlines = true;
                     } else {
-                        holder.textView.setMaxLines(4);
+                        holder.textView.setMaxLines(2);
                         maxlines = false;
                     }
                 }
