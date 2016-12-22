@@ -51,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
     private Menu menu;
     public static String searchquery;
     public static boolean isSearch = false;
+    public static boolean isPopluar = false;
+    public static boolean isUpcoming = false;
     public ProgressDialog pdialog;
     public int count = 2;
     public TextView typemovie;
@@ -194,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
                 recyclerView.removeAllViewsInLayout();
                 adapter.notifyDataSetChanged();
                 typemovie.setText("Popular");
+                isPopluar = true;
 
                 Call<MovieSearch> call = apiService.getpopular(API_KEY);
                 call.enqueue(new Callback<MovieSearch>() {
@@ -217,6 +220,7 @@ public class MainActivity extends AppCompatActivity {
                 recyclerView.removeAllViewsInLayout();
                 adapter.notifyDataSetChanged();
                 typemovie.setText("Upcoming");
+                isUpcoming = true;
 
                 Call<MovieSearch> calling = apiService.getupcoming(API_KEY);
                 calling.enqueue(new Callback<MovieSearch>() {
@@ -354,6 +358,8 @@ public class MainActivity extends AppCompatActivity {
     private void prepareAlbums() {
 
         isSearch = false;
+        isUpcoming = false;
+        isPopluar = false;
 
 
         Call<MovieSearch> call = apiService.getresult(API_KEY);

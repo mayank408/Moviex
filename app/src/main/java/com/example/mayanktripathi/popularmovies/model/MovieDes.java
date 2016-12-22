@@ -155,7 +155,11 @@ public class MovieDes extends AppCompatActivity {
         Log.v("main activity", "pos =  " + pos);
 
 
-        if (MainActivity.isSearch)
+        if(MainActivity.isPopluar)
+            call = apiService.getpopular(API_KEY);
+        else if (MainActivity.isUpcoming)
+            call = apiService.getupcoming(API_KEY);
+        else if (MainActivity.isSearch)
             call = apiService.getsearch(API_KEY, MainActivity.searchquery);
         else {
             call = apiService.getresult(API_KEY);
