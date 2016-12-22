@@ -18,11 +18,12 @@ import java.util.List;
 
     public class reviewAdapter extends RecyclerView.Adapter<reviewAdapter.ViewHolder>{
 
-        List<String> SubjectValues;
-        Context context;
-        View view1;
-        ViewHolder viewHolder1;
-        TextView textView;
+        private List<String> SubjectValues;
+        private Context context;
+        private View view1;
+        private ViewHolder viewHolder1;
+        private TextView textView;
+        private Boolean maxlines = false;
 
         public reviewAdapter(Context context1,List<String> SubjectValues1){
 
@@ -30,11 +31,11 @@ import java.util.List;
             context = context1;
         }
 
-        public static class ViewHolder extends RecyclerView.ViewHolder{
+        static class ViewHolder extends RecyclerView.ViewHolder{
 
-            public TextView textView;
+            TextView textView;
 
-            public ViewHolder(View v){
+            ViewHolder(View v){
 
                 super(v);
 
@@ -53,8 +54,22 @@ import java.util.List;
         }
 
     @Override
-    public void onBindViewHolder(reviewAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final reviewAdapter.ViewHolder holder, int position) {
         holder.textView.setText(SubjectValues.get(position));
+
+        holder.textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    if (!maxlines) {
+                        holder.textView.setMaxLines(100);
+                        maxlines = true;
+                    } else {
+                        holder.textView.setMaxLines(4);
+                        maxlines = false;
+                    }
+                }
+
+        });
     }
 
 
