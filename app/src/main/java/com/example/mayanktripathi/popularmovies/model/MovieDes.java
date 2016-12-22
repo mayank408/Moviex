@@ -27,8 +27,14 @@ import com.example.mayanktripathi.popularmovies.Activity.MainActivity;
 import com.example.mayanktripathi.popularmovies.MoviedbApi.MovieSearchApi;
 import com.example.mayanktripathi.popularmovies.R;
 import com.example.mayanktripathi.popularmovies.MoviedbApi.TheMovieDbApi;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -112,6 +118,7 @@ public class MovieDes extends AppCompatActivity {
         poster = (ImageView) findViewById(R.id.posterImageDetail);
         headposter = (ImageView) findViewById(R.id.backdrop);
         description = (TextView) findViewById(R.id.movieSummary);
+        rating = (TextView) findViewById(R.id.ratingtext);
 
         context = getApplicationContext();
 
@@ -157,9 +164,28 @@ public class MovieDes extends AppCompatActivity {
                              String release = response.body().getResults().get(pos).getRealasedate();
                              String img = response.body().getResults().get(pos).getImgUrl();
                              String lang = response.body().getResults().get(pos).getLanguage();
+                             String rate = response.body().getResults().get(pos).getRating();
                              id = response.body().getResults().get(pos).getId();
 
                              String sharetitle = title_movie.replace(" ", "+");
+
+                             release = release.replace("-", "");
+
+
+                             DateFormat target = new SimpleDateFormat("MMMM yyyy");
+                             DateFormat original = new SimpleDateFormat("yyyyMMdd" , Locale.ENGLISH);
+                             Date date = null;
+                             try {
+                                 date = original.parse(release);
+                             } catch (ParseException e) {
+                                 e.printStackTrace();
+                             }
+                             String formattedDate = target.format(date);
+
+                             // 20120821
+
+                             Log.v(TAG , formattedDate);
+
 
                              shareIntent.putExtra(Intent.EXTRA_TEXT, "https://www.youtube.com/results?search_query="+sharetitle );
                              getreviews(id);
@@ -170,10 +196,11 @@ public class MovieDes extends AppCompatActivity {
 
                              toolbar.setTitle(title_movie);
 
+                             rating.setText(rate);
                              language.setText(lang);
                              title.setText(title_movie);
                              description.setText(des);
-                             realeasedate.setText(release);
+                             realeasedate.setText(formattedDate);
                              Glide.with(getBaseContext())
                                      .load(poster_movie)
                                      .error(R.mipmap.ic_launcher)

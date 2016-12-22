@@ -28,6 +28,8 @@ import com.example.mayanktripathi.popularmovies.MoviedbApi.TheMovieDbApi;
 import com.example.mayanktripathi.popularmovies.R;
 import com.example.mayanktripathi.popularmovies.model.MovieSearch;
 import com.example.mayanktripathi.popularmovies.model.movies;
+import com.github.ivbaranov.mfb.MaterialFavoriteButton;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,10 +63,17 @@ public class MainActivity extends AppCompatActivity {
             MovieSearchApi.getClient().create(TheMovieDbApi.class);
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if(API_KEY==null)
+        {
+            Toast.makeText(this, "Please get an API Key", Toast.LENGTH_SHORT).show();
+        }
 
         pdialog=new ProgressDialog(this);
         pdialog.setCancelable(true);
@@ -87,9 +96,32 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
+
         prepareAlbums();
 
+
+        MaterialFavoriteButton favorite = new MaterialFavoriteButton.Builder(this)
+                .create();
+
+
+
+        favorite.setOnFavoriteChangeListener(new MaterialFavoriteButton.OnFavoriteChangeListener() {
+
+            @Override
+            public void onFavoriteChanged(MaterialFavoriteButton buttonView, boolean favorite) {
+                if(buttonView.isFavorite())
+                    Toast.makeText(MainActivity.this, "Added to favourite", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(MainActivity.this, "Removed from favourite", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
     }
+
+
+
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
         this.menu = menu;
