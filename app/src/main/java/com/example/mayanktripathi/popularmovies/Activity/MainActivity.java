@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     public static String searchquery;
     public static boolean isSearch = false;
     public ProgressDialog pdialog;
+    public int count = 2;
 
     final String TAG = MainActivity.class.getSimpleName();
 
@@ -314,6 +315,20 @@ public class MainActivity extends AppCompatActivity {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(
                 Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null;
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        searchView.clearFocus();
+        count --;
+        if(count == 1)
+            Toast.makeText(this, "Press again to exit", Toast.LENGTH_SHORT).show();
+
+        else{
+        finish();
+        super.onBackPressed();
+        }
     }
 }
 
