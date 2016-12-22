@@ -118,7 +118,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="4dp"
                                 android:textAppearance="@android:style/TextAppearance.Material.Title"
-                                android:textSize="20sp"
+                                android:textSize="16sp"
                                 android:typeface="sans"
                                 tools:targetApi="lollipop"
                                 android:textColor="@color/colorAccent"
@@ -135,7 +135,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="4dp"
                                 android:textAppearance="@android:style/TextAppearance.Material.Title"
-                                android:textSize="20sp"
+                                android:textSize="16sp"
                                 android:typeface="sans"
                                 tools:targetApi="lollipop"
                                 android:textColor="@color/colorAccent"/>
@@ -148,7 +148,7 @@
                                 android:textAllCaps="true"
                                 android:textAppearance="@android:style/TextAppearance.Material.Body1"
                                 android:textColor="@color/colorAccent"
-                                android:textSize="20sp"
+                                android:textSize="16sp"
                                 android:typeface="sans"
                                 android:textStyle="italic"
                                 tools:targetApi="lollipop" />
@@ -161,7 +161,7 @@
                                 android:layout_height="wrap_content"
                                 android:textAppearance="@android:style/TextAppearance.Material.Body1"
                                 android:textColor="@color/colorAccent"
-                                android:textSize="20sp"
+                                android:textSize="16sp"
 
                                 android:typeface="sans"
                                 tools:targetApi="lollipop" />
@@ -257,7 +257,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
-                        android:isIndicator="true"
+                        android:rating="0"
                         android:numStars="5"
                         android:stepSize="0.5"
                         android:theme="@style/RatingBar" />

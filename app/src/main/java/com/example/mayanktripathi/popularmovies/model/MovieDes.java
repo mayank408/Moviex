@@ -19,7 +19,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.mayanktripathi.popularmovies.Adapter.reviewAdapter;
@@ -72,6 +74,7 @@ public class MovieDes extends AppCompatActivity {
     TextView title, description, rating, realeasedate, language , review;
     ImageView poster, headposter;
     CollapsingToolbarLayout toolbar;
+    RatingBar ratingBar;
 
 
     TheMovieDbApi apiService =
@@ -119,6 +122,8 @@ public class MovieDes extends AppCompatActivity {
         headposter = (ImageView) findViewById(R.id.backdrop);
         description = (TextView) findViewById(R.id.movieSummary);
         rating = (TextView) findViewById(R.id.ratingtext);
+        ratingBar  = (RatingBar) findViewById(R.id.ratingBar1);
+
 
         context = getApplicationContext();
 
@@ -136,6 +141,11 @@ public class MovieDes extends AppCompatActivity {
 
 
 
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+            }
+        });
 
         Intent intent = getIntent();
 
