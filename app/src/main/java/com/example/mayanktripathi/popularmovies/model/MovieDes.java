@@ -75,6 +75,9 @@ public class MovieDes extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         getMenuInflater().inflate(R.menu.menu_des , menu);
         MenuItem item = menu.findItem(R.id.action_share);
         shareIntent = new Intent(Intent.ACTION_SEND);
@@ -85,6 +88,16 @@ public class MovieDes extends AppCompatActivity {
 
         return super.onCreateOptionsMenu(menu);
 
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == android.R.id.home) {
+            finish(); // close this activity and return to preview activity (if there is any)
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
