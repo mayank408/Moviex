@@ -15,7 +15,6 @@ Here is a fully functional android app which I made from scratch for Android Dev
  
  
  #Screenshots
- 
- ![Alt text](/Users/mayanktripathi/Desktop/Screenshot_1482419098.png )
+
  
  
