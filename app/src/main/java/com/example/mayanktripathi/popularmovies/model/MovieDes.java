@@ -147,6 +147,9 @@ public class MovieDes extends AppCompatActivity {
                              String lang = response.body().getResults().get(pos).getLanguage();
                              id = response.body().getResults().get(pos).getId();
 
+                             String sharetitle = title_movie.replace(" ", "+");
+
+                             shareIntent.putExtra(Intent.EXTRA_TEXT, "https://www.youtube.com/results?search_query="+sharetitle );
                              getreviews(id);
 
                              Log.v(TAG, id);
