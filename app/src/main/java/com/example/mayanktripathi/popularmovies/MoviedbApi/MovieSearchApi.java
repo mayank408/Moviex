@@ -1,4 +1,4 @@
-package com.example.mayanktripathi.popularmovies;
+package com.example.mayanktripathi.popularmovies.MoviedbApi;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

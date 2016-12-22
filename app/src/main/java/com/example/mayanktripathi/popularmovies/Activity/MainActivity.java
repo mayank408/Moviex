@@ -1,4 +1,4 @@
-package com.example.mayanktripathi.popularmovies;
+package com.example.mayanktripathi.popularmovies.Activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -23,6 +23,9 @@ import android.widget.Toast;
 
 
 import com.example.mayanktripathi.popularmovies.Adapter.RecycleviewAdapter;
+import com.example.mayanktripathi.popularmovies.MoviedbApi.MovieSearchApi;
+import com.example.mayanktripathi.popularmovies.MoviedbApi.TheMovieDbApi;
+import com.example.mayanktripathi.popularmovies.R;
 import com.example.mayanktripathi.popularmovies.model.MovieSearch;
 import com.example.mayanktripathi.popularmovies.model.movies;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.example.mayanktripathi.popularmovies;
+package com.example.mayanktripathi.popularmovies.MoviedbApi;
 
 import com.example.mayanktripathi.popularmovies.model.MovieSearch;
 

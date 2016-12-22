@@ -8,27 +8,26 @@ import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.mayanktripathi.popularmovies.Adapter.RecycleviewAdapter;
 import com.example.mayanktripathi.popularmovies.Adapter.reviewAdapter;
-import com.example.mayanktripathi.popularmovies.MainActivity;
-import com.example.mayanktripathi.popularmovies.MovieSearchApi;
+import com.example.mayanktripathi.popularmovies.Activity.MainActivity;
+import com.example.mayanktripathi.popularmovies.MoviedbApi.MovieSearchApi;
 import com.example.mayanktripathi.popularmovies.R;
-import com.example.mayanktripathi.popularmovies.TheMovieDbApi;
-import com.github.florent37.glidepalette.BitmapPalette;
-import com.github.florent37.glidepalette.GlidePalette;
-
+import com.example.mayanktripathi.popularmovies.MoviedbApi.TheMovieDbApi;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +51,8 @@ public class MovieDes extends AppCompatActivity {
     public String id;
     public String videokey;
     public String reviewstext;
+    private ShareActionProvider mShareActionProvider;
+    Intent shareIntent;
 
 
     private Context context;
@@ -60,7 +61,6 @@ public class MovieDes extends AppCompatActivity {
     RecyclerView.LayoutManager recylerViewLayoutManager;
 
     List<String> reviewlist = new ArrayList<>();
-    String s = "dsa";
 
 
 
@@ -71,6 +71,21 @@ public class MovieDes extends AppCompatActivity {
 
     TheMovieDbApi apiService =
             MovieSearchApi.getClient().create(TheMovieDbApi.class);
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.menu_des , menu);
+        MenuItem item = menu.findItem(R.id.action_share);
+        shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, "https://www.youtube.com/watch?v=" );
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+        mShareActionProvider.setShareIntent(shareIntent);
+
+        return super.onCreateOptionsMenu(menu);
+
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,14 +104,16 @@ public class MovieDes extends AppCompatActivity {
         context = getApplicationContext();
 
 
+        Toolbar tool = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(tool);
+
+
 
         recyclerView = (RecyclerView) findViewById(R.id.reviewRv);
         recylerViewLayoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(recylerViewLayoutManager);
         recyclerViewAdapter = new reviewAdapter(context, reviewlist);
         recyclerView.setAdapter(recyclerViewAdapter);
-
-
 
 
 
@@ -186,6 +203,14 @@ public class MovieDes extends AppCompatActivity {
                                                       Log.v(TAG, videokey);
 
                                                       String url = "https://www.youtube.com/watch?v=" + videokey;
+
+
+
+                                                      shareIntent.putExtra(Intent.EXTRA_TEXT, url);
+                                                     // mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+
+
+
                                                       Uri uri = Uri.parse(url);
 
                                                       // create an intent builder
