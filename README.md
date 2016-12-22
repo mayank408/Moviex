@@ -21,6 +21,11 @@ Here is a fully functional android app which I made from scratch for Android Dev
 
  
  ![Alt text]( Screenshot_1482419105.png )
+ 
+ 
+ ![Alt text](  Screenshot_1482419129.png )
+
+
 
  
  
