@@ -14,7 +14,7 @@ Here is a fully functional android app which I made from scratch for Android Dev
  Allows you to share the movies with your friends.
  
  
- #Screenshots
+ # Screenshots
  
  ![Alt text](Screenshot_1482419098.png )
  
